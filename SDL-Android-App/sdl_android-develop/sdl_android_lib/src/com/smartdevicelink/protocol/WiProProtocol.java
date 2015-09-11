@@ -84,45 +84,55 @@ public class WiProProtocol extends AbstractProtocol {
 		sendFrameToTransport(header);
 	} // end-method
 
-	public void SendMessage(ProtocolMessage protocolMsg) {	
+	public void SendMessage(ProtocolMessage protocolMsg) 
+	{	
 		protocolMsg.setRPCType((byte) 0x00); //always sending a request
 		SessionType sessionType = protocolMsg.getSessionType();
 		byte sessionID = protocolMsg.getSessionID();
 		
 		byte[] data = null;
-		if (_version > 1 && sessionType != SessionType.NAV) {
-			if (protocolMsg.getBulkData() != null) {
+		if (_version > 1 && sessionType != SessionType.NAV) 
+		{
+			if (protocolMsg.getBulkData() != null) 
+			{
 				data = new byte[12 + protocolMsg.getJsonSize() + protocolMsg.getBulkData().length];
 				sessionType = SessionType.BULK_DATA;
 			} else data = new byte[12 + protocolMsg.getJsonSize()];
+			
 			BinaryFrameHeader binFrameHeader = new BinaryFrameHeader();
 			binFrameHeader = ProtocolFrameHeaderFactory.createBinaryFrameHeader(protocolMsg.getRPCType(), protocolMsg.getFunctionID(), protocolMsg.getCorrID(), protocolMsg.getJsonSize());
 			System.arraycopy(binFrameHeader.assembleHeaderBytes(), 0, data, 0, 12);
 			System.arraycopy(protocolMsg.getData(), 0, data, 12, protocolMsg.getJsonSize());
-			if (protocolMsg.getBulkData() != null) {
+			if (protocolMsg.getBulkData() != null) 
+			{
 				System.arraycopy(protocolMsg.getBulkData(), 0, data, 12 + protocolMsg.getJsonSize(), protocolMsg.getBulkData().length);
 			}
-		} else {
+		} else 
+		{
 			data = protocolMsg.getData();
 		}
 		
 		// Get the message lock for this protocol session
 		Object messageLock = _messageLocks.get(sessionID);
-		if (messageLock == null) {
+		if (messageLock == null) 
+		{
 			handleProtocolError("Error sending protocol message to SDL.", 
 					new SdlException("Attempt to send protocol message prior to startSession ACK.", SdlExceptionCause.SDL_UNAVAILABLE));
 			return;
 		}
 		
-		synchronized(messageLock) {
-			if (data.length > MAX_DATA_SIZE) {
+		synchronized(messageLock)
+		{
+			if (data.length > MAX_DATA_SIZE) 
+			{
 				
 				messageID++;
 				ProtocolFrameHeader firstHeader = ProtocolFrameHeaderFactory.createMultiSendDataFirst(sessionType, sessionID, messageID, _version);
 	
 				// Assemble first frame.
 				int frameCount = data.length / MAX_DATA_SIZE;
-				if (data.length % MAX_DATA_SIZE > 0) {
+				if (data.length % MAX_DATA_SIZE > 0)
+				{
 					frameCount++;
 				}
 				//byte[] firstFrameData = new byte[HEADER_SIZE];
@@ -137,21 +147,26 @@ public class WiProProtocol extends AbstractProtocol {
 				int currentOffset = 0;
 				byte frameSequenceNumber = 0;
 				
-				for (int i = 0; i < frameCount; i++) {
-					if (i < (frameCount - 1)) {
+				for (int i = 0; i < frameCount; i++) 
+				{
+					if (i < (frameCount - 1))
+					{
 	                     ++frameSequenceNumber;
 	                        if (frameSequenceNumber ==
-	                                ProtocolFrameHeader.FrameDataFinalConsecutiveFrame) {
+	                                ProtocolFrameHeader.FrameDataFinalConsecutiveFrame) 
+	                        {
 	                            // we can't use 0x00 as frameSequenceNumber, because
 	                            // it's reserved for the last frame
 	                            ++frameSequenceNumber;
 	                        }
-					} else {
+					} else 
+					{
 						frameSequenceNumber = ProtocolFrameHeader.FrameDataFinalConsecutiveFrame;
 					} // end-if
 					
 					int bytesToWrite = data.length - currentOffset;
-					if (bytesToWrite > MAX_DATA_SIZE) { 
+					if (bytesToWrite > MAX_DATA_SIZE) 
+					{ 
 						bytesToWrite = MAX_DATA_SIZE; 
 					}
 
@@ -159,7 +174,8 @@ public class WiProProtocol extends AbstractProtocol {
 					handleProtocolFrameToSend(consecHeader, data, currentOffset, bytesToWrite);
 					currentOffset += bytesToWrite;
 				}
-			} else {
+			} else
+			{
 				messageID++;
 				ProtocolFrameHeader header = ProtocolFrameHeaderFactory.createSingleSendData(sessionType, sessionID, data.length, messageID, _version);
 				handleProtocolFrameToSend(header, data, 0, data.length);
@@ -171,7 +187,8 @@ public class WiProProtocol extends AbstractProtocol {
 		handleProtocolFrameToSend(header, null, 0, 0);
 	}
 
-	public void HandleReceivedBytes(byte[] receivedBytes, int receivedBytesLength) {
+	public void HandleReceivedBytes(byte[] receivedBytes, int receivedBytesLength) 
+	{
 
 		byte[] remainingBytes = processReceivedBytes(receivedBytes, receivedBytesLength);
 		while (remainingBytes != null)
@@ -180,37 +197,45 @@ public class WiProProtocol extends AbstractProtocol {
 		}
 	}
 
-	private byte[] processReceivedBytes(byte[] receivedBytes, int receivedBytesLength) {
+	private byte[] processReceivedBytes(byte[] receivedBytes, int receivedBytesLength) 
+	{
 		int receivedBytesReadPos = 0;
 		
 		//Check for a version difference
-		if (_version == 1) {
+		if (_version == 1) 
+		{
 			//Nothing has been read into the buffer and version is 2
-			if (_headerBufWritePos == 0 && (byte) (receivedBytes[0] >>> 4) > 1) {
+			if (_headerBufWritePos == 0 && (byte) (receivedBytes[0] >>> 4) > 1) 
+			{
 				setVersion((byte) (receivedBytes[0] >>> 4));
 			//Buffer has something in it and version is 2
-			} else if ((byte) (_headerBuf[0] >>> 4) > 1) {
+			} else if ((byte) (_headerBuf[0] >>> 4) > 1) 
+			{
 				//safe current state of the buffer and also set the new version
 				byte[] tempHeader = new byte[_headerBufWritePos];
 				tempHeader = _headerBuf;
 				setVersion((byte) (_headerBuf[0] >>> 4));
 				_headerBuf = tempHeader;
-			} else if ( (_version == 1) && ( HEADER_SIZE == 12) ){
+			} else if ( (_version == 1) && ( HEADER_SIZE == 12) )
+			{
 				setVersion((byte) (1));
 			}
 			
 		}
 		
 		// If I don't yet know the message size, grab those bytes.
-		if (!_haveHeader) {
+		if (!_haveHeader) 
+		{
 			// If I can't get the size, just get the bytes that are there.
 			int headerBytesNeeded = _headerBuf.length - _headerBufWritePos;
-			if (receivedBytesLength < headerBytesNeeded) {
+			if (receivedBytesLength < headerBytesNeeded) 
+			{
 				System.arraycopy(receivedBytes, receivedBytesReadPos,
 						_headerBuf, _headerBufWritePos, receivedBytesLength);
 				_headerBufWritePos += receivedBytesLength;
 				return null;
-			} else {
+			} else 
+			{
 			// If I got the size, allocate the buffer
 				System.arraycopy(receivedBytes, receivedBytesReadPos,
 						_headerBuf, _headerBufWritePos, headerBytesNeeded);
@@ -269,12 +294,14 @@ public class WiProProtocol extends AbstractProtocol {
 		int bytesLeft = receivedBytesLength - receivedBytesReadPos;
 		int bytesNeeded = _dataBuf.length - _dataBufWritePos;
 		// If I don't have enough bytes for the message, just grab what's there.
-		if (bytesLeft < bytesNeeded) {
+		if (bytesLeft < bytesNeeded) 
+		{
 			System.arraycopy(receivedBytes, receivedBytesReadPos, _dataBuf,
 					_dataBufWritePos, bytesLeft);
 			_dataBufWritePos += bytesLeft;
 			return null;
-		} else {
+		} else 
+		{
 		// Fill the buffer and call the handler!
 			System.arraycopy(receivedBytes, receivedBytesReadPos, _dataBuf, _dataBufWritePos, bytesNeeded);
 			receivedBytesReadPos += bytesNeeded;
@@ -292,7 +319,8 @@ public class WiProProtocol extends AbstractProtocol {
 			
 			// If there are any bytes left, recurse.
 			int moreBytesLeft = receivedBytesLength - receivedBytesReadPos;
-			if (moreBytesLeft > 0) {
+			if (moreBytesLeft > 0) 
+			{
 				byte[] moreBytes = new byte[moreBytesLeft];
 				System.arraycopy(receivedBytes, receivedBytesReadPos,
 						moreBytes, 0, moreBytesLeft);
@@ -397,16 +425,19 @@ public class WiProProtocol extends AbstractProtocol {
 			//}
 		} // end-method
 		
-		protected void handleFrame(ProtocolFrameHeader header, byte[] data) {
-			if (header.getFrameType().equals(FrameType.Control)) {
+		protected void handleFrame(ProtocolFrameHeader header, byte[] data) 
+		{
+			if (header.getFrameType().equals(FrameType.Control)) 
+			{
 				handleControlFrame(header, data);
-			} else {
+			} else
+			{
 				// Must be a form of data frame (single, first, consecutive, etc.)
-				if (   header.getFrameType() == FrameType.First
-					|| header.getFrameType() == FrameType.Consecutive
-					) {
+				if (header.getFrameType() == FrameType.First|| header.getFrameType() == FrameType.Consecutive) 
+				{
 					handleMultiFrameMessageFrame(header, data);
-				} else {
+				} else 
+				{
 					handleSingleFrameMessageFrame(header, data);
 				}
 			} // end-if

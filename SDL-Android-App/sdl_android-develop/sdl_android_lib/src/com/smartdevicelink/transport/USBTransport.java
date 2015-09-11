@@ -644,7 +644,7 @@ public class USBTransport extends SdlTransport {
      * Since the class has to have access to the parent class' variables,
      * sdlhronization must be taken in consideration! For now, all access
      * to variables of USBTransport must be surrounded with
-     * synchronized (USBTransport.this) { … }
+     * synchronized (USBTransport.this) { 鈥�}
      */
     private class USBTransportReader implements Runnable {
         /**
@@ -740,16 +740,20 @@ public class USBTransport extends SdlTransport {
          * Continuously reads data from the transport's input stream, blocking
          * when no data is available.
          */
-        private void readFromTransport() {
+        private void readFromTransport() 
+        {
             final int READ_BUFFER_SIZE = 4096;
             byte[] buffer = new byte[READ_BUFFER_SIZE];
             int bytesRead;
 
             // read loop
-            while (!isInterrupted()) {
-                try {
+            while (!isInterrupted()) 
+            {
+                try 
+                {
                     bytesRead = mInputStream.read(buffer);
-                    if (bytesRead == -1) {
+                    if (bytesRead == -1) 
+                    {
                         if (isInterrupted()) {
                             logI("EOF reached, and thread is interrupted");
                         } else {

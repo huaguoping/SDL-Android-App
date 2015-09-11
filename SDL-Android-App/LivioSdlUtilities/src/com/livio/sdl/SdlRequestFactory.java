@@ -48,7 +48,8 @@ import com.smartdevicelink.proxy.rpc.enums.UpdateMode;
  * @author Mike Burke
  *
  */
-public final class SdlRequestFactory {
+public final class SdlRequestFactory 
+{
 	
 	private SdlRequestFactory() {}
 
@@ -62,20 +63,25 @@ public final class SdlRequestFactory {
 	 * @param imageName The image name of any image associated with the command
 	 * @return The created AddCommand request
 	 */
-	public static RPCRequest addCommand(String name, int position, int parentId, String vrCommands, String imageName){
-		if(name == null){
+	public static RPCRequest addCommand(String name, int position, int parentId, String vrCommands, String imageName)
+	{
+		if(name == null)
+		{
 			throw new NullPointerException();
 		}
-		if(name.length() <= 0){
+		if(name.length() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		AddCommand result = new AddCommand();
 		result.setMenuParams(SdlUtils.menuParams(name, position, parentId));
-		if(vrCommands != null && vrCommands.length() > 0){
+		if(vrCommands != null && vrCommands.length() > 0)
+		{
 			result.setVrCommands(SdlUtils.voiceRecognitionVector(vrCommands));
 		}
-		if(imageName != null){
+		if(imageName != null)
+		{
 			result.setCmdIcon(SdlUtils.dynamicImage(imageName));
 		}
 		return result;
@@ -88,11 +94,14 @@ public final class SdlRequestFactory {
 	 * @param position The position in the menu list
 	 * @return The created AddSubMenu request
 	 */
-	public static RPCRequest addSubmenu(String submenuName, int position){
-		if(submenuName == null){
+	public static RPCRequest addSubmenu(String submenuName, int position)
+	{
+		if(submenuName == null)
+		{
 			throw new NullPointerException();
 		}
-		if(submenuName.length() <= 0){
+		if(submenuName.length() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -108,8 +117,10 @@ public final class SdlRequestFactory {
 	 * @param name The ButtonName that is being subscribed to
 	 * @return The created SubscribeButton request
 	 */
-	public static RPCRequest subscribeButton(ButtonName name){
-		if(name == null){
+	public static RPCRequest subscribeButton(ButtonName name)
+	{
+		if(name == null)
+		{
 			throw new NullPointerException();
 		}
 		
@@ -124,8 +135,10 @@ public final class SdlRequestFactory {
 	 * @param name The ButtonName that is being unsubscribed from
 	 * @return The created UnsubscribeButton request
 	 */
-	public static RPCRequest unsubscribeButton(ButtonName name){
-		if(name == null){
+	public static RPCRequest unsubscribeButton(ButtonName name)
+	{
+		if(name == null)
+		{
 			throw new NullPointerException();
 		}
 		
@@ -141,8 +154,10 @@ public final class SdlRequestFactory {
 	 * @param hmiLang HMI language to set.  Cannot be null
 	 * @return The ChangeRegistration request
 	 */
-	public static RPCRequest changeRegistration(Language mainLang, Language hmiLang){
-		if(mainLang == null || hmiLang == null){
+	public static RPCRequest changeRegistration(Language mainLang, Language hmiLang)
+	{
+		if(mainLang == null || hmiLang == null)
+		{
 			throw new NullPointerException();
 		}
 		
@@ -158,11 +173,14 @@ public final class SdlRequestFactory {
 	 * @param choiceSet The choices contained within the CreateInteractionChoiceSet.  Cannot be null or empty vector.
 	 * @return The created CreateInteractionChoiceSet request
 	 */
-	public static RPCRequest createInteractionChoiceSet(Vector<Choice> choiceSet){
-		if(choiceSet == null){
+	public static RPCRequest createInteractionChoiceSet(Vector<Choice> choiceSet)
+	{
+		if(choiceSet == null)
+		{
 			throw new NullPointerException();
 		}
-		if(choiceSet.size() <= 0){
+		if(choiceSet.size() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -177,9 +195,10 @@ public final class SdlRequestFactory {
 	 * @param commandId The id of the command to delete.  Must be a valid ID value.
 	 * @return The created DeleteCommand request
 	 */
-	public static RPCRequest deleteCommand(int commandId){
-		if(commandId < SdlConstants.AddCommandConstants.MINIMUM_COMMAND_ID ||
-		   commandId > SdlConstants.AddCommandConstants.MAXIMUM_COMMAND_ID){
+	public static RPCRequest deleteCommand(int commandId)
+	{
+		if(commandId < SdlConstants.AddCommandConstants.MINIMUM_COMMAND_ID ||commandId > SdlConstants.AddCommandConstants.MAXIMUM_COMMAND_ID)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -194,9 +213,10 @@ public final class SdlRequestFactory {
 	 * @param menuId The id of the command to delete.  Must be a valid ID value.
 	 * @return The created DeleteSubMenu request
 	 */
-	public static RPCRequest deleteSubmenu(int menuId){
-		if(menuId < SdlConstants.AddCommandConstants.MINIMUM_COMMAND_ID ||
-			menuId > SdlConstants.AddCommandConstants.MAXIMUM_COMMAND_ID){
+	public static RPCRequest deleteSubmenu(int menuId)
+	{
+		if(menuId < SdlConstants.AddCommandConstants.MINIMUM_COMMAND_ID ||menuId > SdlConstants.AddCommandConstants.MAXIMUM_COMMAND_ID)
+		{
 			throw new IllegalArgumentException();
 		}
 				
@@ -211,8 +231,10 @@ public final class SdlRequestFactory {
 	 * @param fileName The file name of the image to delete.  Cannot be null.
 	 * @return The created DeleteFile request
 	 */
-	public static RPCRequest deleteFile(String fileName){
-		if(fileName == null){
+	public static RPCRequest deleteFile(String fileName)
+	{
+		if(fileName == null)
+		{
 			throw new NullPointerException();
 		}
 		
@@ -227,8 +249,10 @@ public final class SdlRequestFactory {
 	 * @param id The id of the choice set to delete.  Must be a valid id value.
 	 * @return
 	 */
-	public static RPCRequest deleteInteractionChoiceSet(int id){
-		if(id < SdlConstants.InteractionChoiceSetConstants.MINIMUM_CHOICE_SET_ID || id > SdlConstants.InteractionChoiceSetConstants.MAXIMUM_CHOICE_SET_ID){
+	public static RPCRequest deleteInteractionChoiceSet(int id)
+	{
+		if(id < SdlConstants.InteractionChoiceSetConstants.MINIMUM_CHOICE_SET_ID || id > SdlConstants.InteractionChoiceSetConstants.MAXIMUM_CHOICE_SET_ID)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -244,8 +268,10 @@ public final class SdlRequestFactory {
 	 * @param ecuId The ECU id to get DTCs for.  Must be a valid ECU id value.
 	 * @return The created GetDTCs request
 	 */
-	public static RPCRequest getDtcs(int ecuId){
-		if(ecuId < SdlConstants.GetDtcsConstants.MINIMUM_ECU_ID || ecuId > SdlConstants.GetDtcsConstants.MAXIMUM_ECU_ID){
+	public static RPCRequest getDtcs(int ecuId)
+	{
+		if(ecuId < SdlConstants.GetDtcsConstants.MINIMUM_ECU_ID || ecuId > SdlConstants.GetDtcsConstants.MAXIMUM_ECU_ID)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -260,11 +286,14 @@ public final class SdlRequestFactory {
 	 * @param ecuId
 	 * @return
 	 */
-	public static RPCRequest getDtcs(String ecuId){
-		try{
+	public static RPCRequest getDtcs(String ecuId)
+	{
+		try
+		{
 			return getDtcs(Integer.parseInt(ecuId));
 		}
-		catch(NumberFormatException e){
+		catch(NumberFormatException e)
+		{
 			throw new IllegalArgumentException();
 		}
 	}
@@ -279,27 +308,32 @@ public final class SdlRequestFactory {
 	 * @param timeout The timeout for the interaction.  Must be within timeout range.
 	 * @return The created PerformInteraction request
 	 */
-	public static RPCRequest performInteraction(String title, String voicePrompt, Vector<Integer> choiceIds, InteractionMode mode, int timeout){
-		if(choiceIds == null || choiceIds.size() <= 0){
+	public static RPCRequest performInteraction(String title, String voicePrompt, Vector<Integer> choiceIds, InteractionMode mode, int timeout)
+	{
+		if(choiceIds == null || choiceIds.size() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		if( (timeout < MathUtils.convertSecsToMillisecs(SdlConstants.PerformInteractionConstants.MINIMUM_TIMEOUT) || 
 			 timeout > MathUtils.convertSecsToMillisecs(SdlConstants.PerformInteractionConstants.MAXIMUM_TIMEOUT) ) &&
-			(timeout != SdlConstants.PerformInteractionConstants.INVALID_TIMEOUT) ){
+			(timeout != SdlConstants.PerformInteractionConstants.INVALID_TIMEOUT) )
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		PerformInteraction result = new PerformInteraction();
 		
 		// set the title
-		if(title == null || title.length() <= 0){
+		if(title == null || title.length() <= 0)
+		{
 			title = " ";
 		}
 		result.setInitialText(title);
 		
 		// set the voice prompt
-		if(voicePrompt == null || voicePrompt.length() <= 0){
+		if(voicePrompt == null || voicePrompt.length() <= 0)
+		{
 			voicePrompt = " ";
 		}
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(voicePrompt);
@@ -312,7 +346,8 @@ public final class SdlRequestFactory {
 		result.setInteractionChoiceSetIDList(choiceIds);
 		
 		// set the timeout
-		if(timeout != SdlConstants.PerformInteractionConstants.INVALID_TIMEOUT){
+		if(timeout != SdlConstants.PerformInteractionConstants.INVALID_TIMEOUT)
+		{
 			result.setTimeout(timeout);
 		}
 		
@@ -328,7 +363,8 @@ public final class SdlRequestFactory {
 	 * @param mode The interaction mode for this interaction
 	 * @return The created PerformInteraction request
 	 */
-	public static RPCRequest performInteraction(String title, String voicePrompt, Vector<Integer> choiceIds, InteractionMode mode){
+	public static RPCRequest performInteraction(String title, String voicePrompt, Vector<Integer> choiceIds, InteractionMode mode)
+	{
 		return performInteraction(title, voicePrompt, choiceIds, mode, SdlConstants.PerformInteractionConstants.INVALID_TIMEOUT);
 	}
 	
@@ -341,11 +377,14 @@ public final class SdlRequestFactory {
 	 * @param rawBytes The raw bytes of the file to send.  Cannot be null or empty.
 	 * @return The created PutFile request
 	 */
-	public static RPCRequest putFile(String fileName, FileType type, boolean persistent, byte[] rawBytes){
-		if(fileName == null || type == null || rawBytes == null){
+	public static RPCRequest putFile(String fileName, FileType type, boolean persistent, byte[] rawBytes)
+	{
+		if(fileName == null || type == null || rawBytes == null)
+		{
 			throw new NullPointerException();
 		}
-		if(fileName.length() <= 0 || rawBytes.length <= 0){
+		if(fileName.length() <= 0 || rawBytes.length <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -364,7 +403,8 @@ public final class SdlRequestFactory {
 	 * @param did The DID id.  Must be a valid DID id value.
 	 * @return The created ReadDid request
 	 */
-	public static RPCRequest readDid(int ecu, int did){
+	public static RPCRequest readDid(int ecu, int did)
+	{
 		Vector<Integer> dids = new Vector<Integer>(1);
 		dids.add(did);
 		return readDid(ecu, dids);
@@ -377,18 +417,22 @@ public final class SdlRequestFactory {
 	 * @param dids A vector of DID ids.  Cannot be null or empty and all values must be valid DID id values.
 	 * @return The created ReadDID request
 	 */
-	public static RPCRequest readDid(int ecu, Vector<Integer> dids){
-		if(dids == null){
+	public static RPCRequest readDid(int ecu, Vector<Integer> dids)
+	{
+		if(dids == null)
+		{
 			throw new NullPointerException();
 		}
 		
-		if(ecu < SdlConstants.ReadDidsConstants.MINIMUM_ECU_ID || ecu > SdlConstants.ReadDidsConstants.MAXIMUM_ECU_ID  ||
-		   dids.size() <= 0){
+		if(ecu < SdlConstants.ReadDidsConstants.MINIMUM_ECU_ID || ecu > SdlConstants.ReadDidsConstants.MAXIMUM_ECU_ID  ||dids.size() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
-		for(Integer did : dids){
-			if(did < SdlConstants.ReadDidsConstants.MINIMUM_DID_LOCATION || did > SdlConstants.ReadDidsConstants.MAXIMUM_DID_LOCATION){
+		for(Integer did : dids)
+		{
+			if(did < SdlConstants.ReadDidsConstants.MINIMUM_DID_LOCATION || did > SdlConstants.ReadDidsConstants.MAXIMUM_DID_LOCATION)
+			{
 				throw new IllegalArgumentException();
 			}
 		}
@@ -406,13 +450,16 @@ public final class SdlRequestFactory {
      * @param timeoutInMs The timeout for the request in milliseconds.  Must be within timeout range for ScrollableMessage.
      * @return The created ScrollableMessage request
      */
-    public static RPCRequest scrollableMessage(String msg, int timeoutInMs){
-        if(msg == null){
+    public static RPCRequest scrollableMessage(String msg, int timeoutInMs)
+    {
+        if(msg == null)
+        {
             throw new NullPointerException();
         }
         if(msg.length() > SdlConstants.ScrollableMessageConstants.MESSAGE_LENGTH_MAX ||
            timeoutInMs < MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MINIMUM) || 
-           timeoutInMs > MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MAXIMUM) ){
+           timeoutInMs > MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MAXIMUM) )
+        {
             throw new IllegalArgumentException();
         }
         
@@ -429,20 +476,24 @@ public final class SdlRequestFactory {
      * @param timeoutInMs The timeout for the request in milliseconds.  Must be within timeout range for ScrollableMessage.
      * @return The created ScrollableMessage request
      */
-    public static RPCRequest scrollableMessage(String msg, int timeoutInMs, List<SoftButton> softButtons){
-        if(msg == null){
+    public static RPCRequest scrollableMessage(String msg, int timeoutInMs, List<SoftButton> softButtons)
+    {
+        if(msg == null)
+        {
             throw new NullPointerException();
         }
         if(msg.length() > SdlConstants.ScrollableMessageConstants.MESSAGE_LENGTH_MAX ||
            timeoutInMs < MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MINIMUM) || 
-           timeoutInMs > MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MAXIMUM) ){
+           timeoutInMs > MathUtils.convertSecsToMillisecs(SdlConstants.ScrollableMessageConstants.TIMEOUT_MAXIMUM) )
+        {
             throw new IllegalArgumentException();
         }
         
         ScrollableMessage result = new ScrollableMessage();
         result.setScrollableMessageBody(msg);
         result.setTimeout(timeoutInMs);
-        if(softButtons != null && softButtons.size() > 0){
+        if(softButtons != null && softButtons.size() > 0)
+        {
             result.setSoftButtons(new Vector<SoftButton>(softButtons));
         }
         return result;
@@ -459,23 +510,29 @@ public final class SdlRequestFactory {
 	 * @param toneDuration The length time to show the alert.  Must be within timeout range for Alert.
 	 * @return The created Alert request
 	 */
-	public static RPCRequest alert(String textToSpeak, String line1, String line2, String line3, boolean playTone, int toneDuration){
+	public static RPCRequest alert(String textToSpeak, String line1, String line2, String line3, boolean playTone, int toneDuration)
+	{
 		if(toneDuration < MathUtils.convertSecsToMillisecs(SdlConstants.AlertConstants.ALERT_TIME_MINIMUM) ||
-		    toneDuration > MathUtils.convertSecsToMillisecs(SdlConstants.AlertConstants.ALERT_TIME_MAXIMUM) ){
+		    toneDuration > MathUtils.convertSecsToMillisecs(SdlConstants.AlertConstants.ALERT_TIME_MAXIMUM) )
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		Alert result = new Alert();
-		if(textToSpeak != null && textToSpeak.length() > 0){
+		if(textToSpeak != null && textToSpeak.length() > 0)
+		{
 			result.setTtsChunks(SdlUtils.createTextToSpeechVector(textToSpeak));
 		}
-		if(line1 != null && line1.length() > 0){
+		if(line1 != null && line1.length() > 0)
+		{
 			result.setAlertText1(line1);
 		}
-		if(line2 != null && line2.length() > 0){
+		if(line2 != null && line2.length() > 0)
+		{
 			result.setAlertText2(line2);
 		}
-		if(line3 != null && line3.length() > 0){
+		if(line3 != null && line3.length() > 0)
+		{
 			result.setAlertText3(line3);
 		}
 		
@@ -491,11 +548,14 @@ public final class SdlRequestFactory {
 	 * @param iconName The name of the image to show as the app icon.  Cannot be null or empty.
 	 * @return The created SetAppIcon request
 	 */
-	public static RPCRequest setAppIcon(String iconName){
-		if(iconName == null){
+	public static RPCRequest setAppIcon(String iconName)
+	{
+		if(iconName == null)
+		{
 			throw new NullPointerException();
 		}
-		if(iconName.length() <= 0){
+		if(iconName.length() <= 0)
+		{
 			throw new IllegalArgumentException();
 		}
 		
@@ -511,14 +571,17 @@ public final class SdlRequestFactory {
 	 * @param startTime The start time for the clock timer
 	 * @return The created SetMediaClockTimer request
 	 */
-	public static RPCRequest setMediaClockTimer(UpdateMode mode, StartTime startTime){
-		if(mode == null){
+	public static RPCRequest setMediaClockTimer(UpdateMode mode, StartTime startTime)
+	{
+		if(mode == null)
+		{
 			throw new NullPointerException();
 		}
 		
 		SetMediaClockTimer result = new SetMediaClockTimer();
 		result.setUpdateMode(mode);
-		if(startTime != null){
+		if(startTime != null)
+		{
 			result.setStartTime(startTime);
 		}
 		return result;
@@ -534,7 +597,8 @@ public final class SdlRequestFactory {
 	 * @param seconds The seconds place of the clock
 	 * @return The created SetMediaClockTimer request
 	 */
-	public static RPCRequest setMediaClockTimer(UpdateMode mode, int hours, int minutes, int seconds){
+	public static RPCRequest setMediaClockTimer(UpdateMode mode, int hours, int minutes, int seconds)
+	{
 		return setMediaClockTimer(mode, SdlUtils.createStartTime(hours, minutes, seconds));
 	}
 	
@@ -544,7 +608,8 @@ public final class SdlRequestFactory {
 	 * @param mode The UpdateMode for the clock timer.  Cannot be null.
 	 * @return
 	 */
-	public static RPCRequest setMediaClockTimer(UpdateMode mode){
+	public static RPCRequest setMediaClockTimer(UpdateMode mode)
+	{
 		return setMediaClockTimer(mode, null);
 	}
 	
@@ -560,27 +625,35 @@ public final class SdlRequestFactory {
 	 * @param imageName The name of the image to show on the HMI
 	 * @return The created Show request
 	 */
-	public static RPCRequest show(String line1, String line2, String line3, String line4, String statusBar, TextAlignment alignment, String imageName){
+	public static RPCRequest show(String line1, String line2, String line3, String line4, String statusBar, TextAlignment alignment, String imageName)
+	{
 		Show result = new Show();
-		if(line1 != null){
+		if(line1 != null)
+		{
 			result.setMainField1(line1);
 		}
-		if(line2 != null){
+		if(line2 != null)
+		{
 			result.setMainField2(line2);
 		}
-		if(line3 != null){
+		if(line3 != null)
+		{
 			result.setMainField3(line3);
 		}
-		if(line4 != null){
+		if(line4 != null)
+		{
 			result.setMainField4(line4);
 		}
-		if(statusBar != null){
+		if(statusBar != null)
+		{
 			result.setStatusBar(statusBar);
 		}
-		if(alignment != null){
+		if(alignment != null)
+		{
 			result.setAlignment(alignment);
 		}
-		if(imageName != null){
+		if(imageName != null)
+		{
 			Image image = SdlUtils.dynamicImage(imageName);
 			result.setGraphic(image);
 		}
@@ -598,23 +671,28 @@ public final class SdlRequestFactory {
 	 * @param timeout The timeout of the slider.  Must be a valid slider timeout value.
 	 * @return The created Slider request
 	 */
-	public static RPCRequest slider(String header, String footer, boolean dynamicFooter, int numOfTicks, int startPosition, int timeout){
-		if(header == null){
+	public static RPCRequest slider(String header, String footer, boolean dynamicFooter, int numOfTicks, int startPosition, int timeout)
+	{
+		if(header == null)
+		{
 			throw new NullPointerException();
 		}
 		if(numOfTicks < SdlConstants.SliderConstants.NUM_OF_TICKS_MIN || numOfTicks > SdlConstants.SliderConstants.NUM_OF_TICKS_MAX ||
 		   startPosition < SdlConstants.SliderConstants.START_POSITION_MIN || startPosition > numOfTicks ||
 		   timeout < MathUtils.convertSecsToMillisecs(SdlConstants.SliderConstants.TIMEOUT_MIN) ||
-		   timeout > MathUtils.convertSecsToMillisecs(SdlConstants.SliderConstants.TIMEOUT_MAX) ){
+		   timeout > MathUtils.convertSecsToMillisecs(SdlConstants.SliderConstants.TIMEOUT_MAX) )
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		Slider result = new Slider();
 		result.setSliderHeader(header);
-		if(dynamicFooter){
+		if(dynamicFooter)
+		{
 		    result.setSliderFooter(SdlUtils.voiceRecognitionVector(footer));
 		}
-		else{
+		else
+		{
 		    Vector<String> staticFooter = new Vector<String>(1);
 		    staticFooter.add(footer);
 		    result.setSliderFooter(staticFooter);
@@ -632,8 +710,10 @@ public final class SdlRequestFactory {
 	 * @param speechCapabilities The type of input - either text, phoneme type or silence.  Cannot be null.
 	 * @return The created Speak request
 	 */
-	public static RPCRequest speak(String text, SpeechCapabilities speechCapabilities){
-		if(text == null || speechCapabilities == null){
+	public static RPCRequest speak(String text, SpeechCapabilities speechCapabilities)
+	{
+		if(text == null || speechCapabilities == null)
+		{
 			throw new NullPointerException();
 		}
 		

@@ -13,6 +13,7 @@ import com.smartdevicelink.proxy.rpc.DeleteCommandResponse;
 import com.smartdevicelink.proxy.rpc.DeleteFileResponse;
 import com.smartdevicelink.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.smartdevicelink.proxy.rpc.DeleteSubMenuResponse;
+import com.smartdevicelink.proxy.rpc.DisplayTextResponse;
 import com.smartdevicelink.proxy.rpc.GetDTCsResponse;
 import com.smartdevicelink.proxy.rpc.GetVehicleDataResponse;
 import com.smartdevicelink.proxy.rpc.ListFilesResponse;
@@ -39,7 +40,8 @@ import com.smartdevicelink.proxy.rpc.enums.Result;
  * @author Mike Burke
  *
  */
-public final class SdlResponseFactory {
+public final class SdlResponseFactory 
+{
 
 	private SdlResponseFactory() {}
 	
@@ -50,8 +52,10 @@ public final class SdlResponseFactory {
 	 * @param request The request to respond to
 	 * @param listener The listener to inform when the response is complete
 	 */
-	public static void sendGenericResponseForRequest(RPCRequest request, IProxyListenerALM listener){
-		if(listener == null){
+	public static void sendGenericResponseForRequest(RPCRequest request, IProxyListenerALM listener)
+	{
+		if(listener == null)
+		{
 			throw new NullPointerException();
 		}
 
@@ -194,6 +198,11 @@ public final class SdlResponseFactory {
 			GetDTCsResponse result = new GetDTCsResponse();
 			setSuccessParams(result, correlationId);
 			listener.onGetDTCsResponse(result);
+		}
+		else if(reqName.equals(FunctionID.DISPLAYTEXT)){
+			DisplayTextResponse result = new DisplayTextResponse();
+			setSuccessParams(result, correlationId);
+			listener.onDisplayTextResponse(result);
 		}
 	}
 	

@@ -20,7 +20,7 @@ public class SdlConnectionDialog extends BaseOkCancelDialog {
 	
 	private EditText et_ipAddress, et_ipPort;
 	private RadioGroup radio_transportGroup;
-	private RadioButton radio_wifi, radio_bt;
+	private RadioButton radio_wifi, radio_usb;
 	
 	public SdlConnectionDialog(Context context) {
 		super(context, DIALOG_TITLE, R.layout.sdl_connection);
@@ -31,7 +31,7 @@ public class SdlConnectionDialog extends BaseOkCancelDialog {
 	
 	public SdlConnectionDialog(Context context, int transportType, String initIpAddress, String initPort){
 		this(context);
-		RadioButton initButton = (transportType == LivioSdlTesterPreferences.PREF_TRANSPORT_BLUETOOTH) ? radio_bt : radio_wifi;
+		RadioButton initButton = (transportType == LivioSdlTesterPreferences.PREF_TRANSPORT_USB) ? radio_usb : radio_wifi;
 		radio_transportGroup.check(initButton.getId());
 		initButton.performClick();
 		setEditTextStrings(initIpAddress, initPort);
@@ -60,8 +60,8 @@ public class SdlConnectionDialog extends BaseOkCancelDialog {
 				setEditTextVisibility(View.VISIBLE);
 			}
 		});
-		radio_bt = (RadioButton) parent.findViewById(R.id.radio_bt);
-		radio_bt.setOnClickListener(new OnClickListener() {
+		radio_usb = (RadioButton) parent.findViewById(R.id.radio_usb);
+		radio_usb.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				setEditTextVisibility(View.GONE);
@@ -76,7 +76,7 @@ public class SdlConnectionDialog extends BaseOkCancelDialog {
 			int selectedId = radio_transportGroup.getCheckedRadioButtonId();
 			String ipAddress = null, ipPort = null;
 			
-			if(selectedId == R.id.radio_bt){
+			if(selectedId == R.id.radio_usb){
 				ipAddress = null;
 				ipPort = null;
 			}

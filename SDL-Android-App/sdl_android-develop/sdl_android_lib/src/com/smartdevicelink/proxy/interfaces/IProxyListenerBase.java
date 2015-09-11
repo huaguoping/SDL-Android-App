@@ -11,6 +11,7 @@ import com.smartdevicelink.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.smartdevicelink.proxy.rpc.DeleteSubMenuResponse;
 import com.smartdevicelink.proxy.rpc.DiagnosticMessageResponse;
 import com.smartdevicelink.proxy.rpc.DialNumberResponse;
+import com.smartdevicelink.proxy.rpc.DisplayTextResponse;
 import com.smartdevicelink.proxy.rpc.EndAudioPassThruResponse;
 import com.smartdevicelink.proxy.rpc.GenericResponse;
 import com.smartdevicelink.proxy.rpc.GetDTCsResponse;
@@ -308,4 +309,8 @@ public interface IProxyListenerBase  {
 	public void onDialNumberResponse(DialNumberResponse response);
 	
 	public void onSendLocationResponse(SendLocationResponse response);
+	
+	//huaguoping-add-20150908-start
+	public void onDisplayTextResponse(DisplayTextResponse response);
+	//huaguoping-add-20150908-end
 }

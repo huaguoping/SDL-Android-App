@@ -205,7 +205,9 @@ public enum SdlCommand{
 	//DIAL_NUMBER ("Dial Number"), //TODO - this command doesn't work on SDL core as of 1/23/2014
 	
 	//Future commands go here.
-	
+	//Huaguoping-Add-20150831-Start
+	DISPLAYTEXT("Display Text"),
+	//Huaguoping-Add-20150831-End
 	;
 	
 	// THIS IS AN ENUM, SO BASICALLY EVERYTHING SHOULD BE FINAL.

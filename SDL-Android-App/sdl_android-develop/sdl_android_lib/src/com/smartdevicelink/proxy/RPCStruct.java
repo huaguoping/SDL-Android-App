@@ -45,8 +45,10 @@ public class RPCStruct {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public JSONObject serializeJSON(byte version) throws JSONException {
-		if (version > 1) {
+    public JSONObject serializeJSON(byte version) throws JSONException 
+    {
+		if (version > 1) 
+		{
 			String messageType = getMessageTypeName(store.keySet());
 			Hashtable<String, Object> function = (Hashtable<String, Object>) store.get(messageType);
 			Hashtable<String, Object> parameters = (Hashtable<String, Object>) function.get(RPCMessage.KEY_PARAMETERS);

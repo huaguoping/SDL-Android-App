@@ -3,11 +3,11 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="E:/SmartDeviceLink/android端/0821/sdl_tester_android-master/LivioSdlUtilities/bin/liviosdlutilities.jar"/>
-	<classpathentry kind="lib" path="E:/SmartDeviceLink/android端/0821/sdl_tester_android-master/sdl_android-develop/sdl_android_lib/bin/sdl_android_lib.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LivioSdlUtilities"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/sdl_android_lib"/>
+	<classpathentry kind="lib" path="E:/SmartDeviceLink/android端/0821/20150825/sdl_android-develop/sdl_android_lib/bin/sdl_android_lib.jar"/>
+	<classpathentry kind="lib" path="E:/SmartDeviceLink/android端/0821/20150825/LivioSdlUtilities/bin/liviosdlutilities.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

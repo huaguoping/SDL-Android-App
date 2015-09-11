@@ -19,11 +19,14 @@ import com.smartdevicelink.proxy.rpc.enums.ImageType;
  * @author Mike Burke
  *
  */
-public class SdlImageItem {
+public class SdlImageItem 
+{
 	
-	public static class SdlImageItemComparator implements Comparator<SdlImageItem>{
+	public static class SdlImageItemComparator implements Comparator<SdlImageItem>
+	{
 		@Override
-		public int compare(SdlImageItem lhs, SdlImageItem rhs) {
+		public int compare(SdlImageItem lhs, SdlImageItem rhs) 
+		{
 			return lhs.getImageName().compareTo(rhs.getImageName());
 		}
 	}
@@ -32,25 +35,30 @@ public class SdlImageItem {
 	private String imageName;
 	private FileType imageType;
 	
-	public SdlImageItem(Bitmap bitmap, String imageName, FileType imageType) {
+	public SdlImageItem(Bitmap bitmap, String imageName, FileType imageType) 
+	{
 		this.bitmap = bitmap;
 		this.imageName = imageName;
 		this.imageType = imageType;
 	}
 
-	public Bitmap getBitmap() {
+	public Bitmap getBitmap() 
+	{
 		return bitmap;
 	}
 
-	public String getImageName() {
+	public String getImageName() 
+	{
 		return imageName;
 	}
 	
-	public FileType getImageType(){
+	public FileType getImageType()
+	{
 		return imageType;
 	}
 	
-	public Image toImage(){
+	public Image toImage()
+	{
 		CompressFormat format = SdlUtils.convertImageTypeToCompressFormat(imageType);
 		
 		Image image = new Image();
@@ -61,7 +69,8 @@ public class SdlImageItem {
 		return image;
 	}
 	
-	public static Image toImage(SdlImageItem item){
+	public static Image toImage(SdlImageItem item)
+	{
 		return item.toImage();
 	}
 

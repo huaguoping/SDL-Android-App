@@ -1454,7 +1454,14 @@ public abstract class SdlProxyBase<proxyListenerType extends IProxyListenerBase>
 			SdlTrace.logRPCEvent(InterfaceActivityDirection.Transmit, request, SDL_LIB_TRACE_KEY);
 						
 			byte[] msgBytes = JsonRPCMarshaller.marshall(request, _wiproVersion);
-	
+			
+			Log.e("SDL",msgBytes.toString());
+			Log.v("SDL",msgBytes.toString());
+			Log.d("SDL",msgBytes.toString());
+			Log.i("SDL",msgBytes.toString());
+			Log.w("SDL",msgBytes.toString());
+			
+			
 			ProtocolMessage pm = new ProtocolMessage();
 			pm.setData(msgBytes);
 			if (sdlSession != null)
@@ -1462,6 +1469,10 @@ public abstract class SdlProxyBase<proxyListenerType extends IProxyListenerBase>
 			pm.setMessageType(MessageType.RPC);
 			pm.setSessionType(SessionType.RPC);
 			pm.setFunctionID(FunctionID.getFunctionId(request.getFunctionName()));
+			
+			Log.e("pm",request.getFunctionName());
+			Log.i("pm",String.format("Function ID is: %d" , FunctionID.getFunctionId(request.getFunctionName())));
+			
 			if (request.getCorrelationID() == null)
 			{
 				//Log error here
@@ -2094,8 +2105,27 @@ public abstract class SdlProxyBase<proxyListenerType extends IProxyListenerBase>
                     });
                 } else {
                     _proxyListener.onListFilesResponse((ListFilesResponse)msg);     
+                }                                      
+            } 
+            //Huaguoping-Add-20150908-start
+            else if (functionName.equals(FunctionID.DISPLAYTEXT.toString())) {
+                // DisplayText
+                final DisplayTextResponse msg = new DisplayTextResponse(hash);
+                if (_callbackToUIThread) {
+                    // Run in UI thread
+                    _mainUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            _proxyListener.onDisplayTextResponse((DisplayTextResponse)msg);
+                        }
+                    });
+                } else {
+                    _proxyListener.onDisplayTextResponse((DisplayTextResponse)msg);     
                 }
-            } else if (functionName.equals(FunctionID.SET_APP_ICON.toString())) {
+            
+            }
+			//Huaguoping-Add-20150908-end
+            else if (functionName.equals(FunctionID.SET_APP_ICON.toString())) {
                 // SetAppIcon
                 final SetAppIconResponse msg = new SetAppIconResponse(hash);
                 if (_callbackToUIThread) {

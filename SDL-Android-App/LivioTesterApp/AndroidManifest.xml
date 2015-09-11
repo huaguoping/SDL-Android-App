@@ -4,6 +4,9 @@
     android:versionCode="2"
     android:versionName="1.1" >
 
+    <!-- Required to use the USB Accessory mode -->										
+    <uses-feature android:name="android.hardware.usb.accessory"/>
+    
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <!-- Required to pair Bluetooth devices -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -18,7 +21,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="12"
         android:targetSdkVersion="19" />
 
     <application
@@ -38,6 +41,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.smartdevicelink.transport.USBAccessoryAttachmentActivity">
+        	<intent-filter>
+        	    <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"/>
+        	</intent-filter>
+        	<meta-data
+        	    android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+        	    android:resource="@xml/accessory_filter"/>
+       	</activity>
+        
         <service android:name="com.livio.sdl.SdlService" />
 
         <activity

@@ -21,7 +21,7 @@ public final class LivioSdlTesterPreferences {
 
 	public static final int PREF_TRANSPORT_INVALID = -1;
 	public static final int PREF_TRANSPORT_WIFI = 0;
-	public static final int PREF_TRANSPORT_BLUETOOTH = 1;
+	public static final int PREF_TRANSPORT_USB = 1;
 	
 	private static final String FILENAME = "com.livio.sdltester";
 	

@@ -127,9 +127,11 @@ public class SdlAlertDialog extends BaseOkCancelDialog implements OnSeekBarChang
 	}
 	
 	// dialog button listsners
-	private final DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener() {
+	private final DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener() 
+	{
 		@Override
-		public void onClick(DialogInterface dialog, int which) {
+		public void onClick(DialogInterface dialog, int which) 
+		{
 			String textToSpeak = et_alert_textToSpeak.getText().toString();
 			String line1   = et_alert_line1.getText().toString();
 			String line2   = et_alert_line2.getText().toString();
@@ -138,21 +140,26 @@ public class SdlAlertDialog extends BaseOkCancelDialog implements OnSeekBarChang
 			int toneDurationInMs = MathUtils.convertSecsToMillisecs(toneDurationInS);
 			boolean playTone = check_alert_playTone.isChecked();
 			
-			if(textToSpeak.equals("")){
+			if(textToSpeak.equals(""))
+			{
 				textToSpeak = null;
 			}
-			if(line1.equals("")){
+			if(line1.equals(""))
+			{
 				line1 = " ";
 			}
-			if(line2.equals("")){
+			if(line2.equals(""))
+			{
 				line2 = " ";
 			}
-			if(line3.equals("")){
+			if(line3.equals(""))
+			{
 				line3 = " ";
 			}
 			
 			Alert result = (Alert) SdlRequestFactory.alert(textToSpeak, line1, line2, line3, playTone, toneDurationInMs);
-			if(softButtons != null && softButtons.size() > 0){
+			if(softButtons != null && softButtons.size() > 0)
+			{
 			    result.setSoftButtons(new Vector<SoftButton>(softButtons));
 			}
 			notifyListener(result);

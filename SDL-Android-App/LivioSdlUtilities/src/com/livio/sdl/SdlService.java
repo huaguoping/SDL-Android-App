@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+//import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -49,6 +50,7 @@ import com.smartdevicelink.proxy.rpc.DeleteSubMenu;
 import com.smartdevicelink.proxy.rpc.DeleteSubMenuResponse;
 import com.smartdevicelink.proxy.rpc.DiagnosticMessageResponse;
 import com.smartdevicelink.proxy.rpc.DialNumberResponse;
+import com.smartdevicelink.proxy.rpc.DisplayTextResponse;
 import com.smartdevicelink.proxy.rpc.EndAudioPassThruResponse;
 import com.smartdevicelink.proxy.rpc.GenericResponse;
 import com.smartdevicelink.proxy.rpc.GetDTCsResponse;
@@ -103,6 +105,8 @@ import com.smartdevicelink.proxy.rpc.enums.HMILevel;
 import com.smartdevicelink.proxy.rpc.enums.Language;
 import com.smartdevicelink.proxy.rpc.enums.SdlDisconnectedReason;
 import com.smartdevicelink.transport.TCPTransportConfig;
+import com.smartdevicelink.transport.USBTransportConfig;
+//import com.smartdevicelink.transport.USBAccessoryAttachmentActivity;
 
 /**
  * Performs all interactions with Smart Device Link in a long-running service that
@@ -111,7 +115,8 @@ import com.smartdevicelink.transport.TCPTransportConfig;
  * @author Mike Burke
  *
  */
-public  class SdlService extends Service implements IProxyListenerALM{
+public  class SdlService extends Service implements IProxyListenerALM
+{
 	
 	/* ********** Nested Classes ********** */
 	
@@ -121,7 +126,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @author Mike Burke
 	 *
 	 */
-	public static class ClientMessages{
+	public static class ClientMessages
+	{
 		/**
 		 * Message.what integer called when SDL has successfully created a connection.
 		 */
@@ -166,7 +172,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @author Mike Burke
 	 *
 	 */
-	public static class ServiceMessages{
+	public static class ServiceMessages
+	{
 		/**
 		 * Message.what integer used to register your activity as a client bound to this service.
 		 */
@@ -225,7 +232,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @author Mike Burke
 	 *
 	 */
-	protected static class MetadataMessages{
+	protected static class MetadataMessages
+	{
 		public static final String BLANK = " ";
 		public static final String APP_NAME = "Livio SDL Tester";
 		public static final String APP_SLOGAN = "More Music, Less Work";
@@ -265,10 +273,13 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	protected final Messenger messenger = new Messenger(new IncomingHandler());
 	
 	@SuppressLint("HandlerLeak")
-	protected class IncomingHandler extends Handler{
+	protected class IncomingHandler extends Handler
+	{
 		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
+		public void handleMessage(Message msg)
+		{
+			switch(msg.what)
+			{
 				case ServiceMessages.REGISTER_CLIENT:
 					registerClient(msg.replyTo);
 					break;
@@ -333,8 +344,10 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param client The client to register
 	 */
-	protected void registerClient(Messenger client){
-		if(clients == null){
+	protected void registerClient(Messenger client)
+	{
+		if(clients == null)
+		{
 			clients = new ArrayList<Messenger>();
 		}
 		
@@ -346,8 +359,10 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param client The client to remove
 	 */
-	protected void unregisterClient(Messenger client){
-		if(clients != null && clients.size() > 0){
+	protected void unregisterClient(Messenger client)
+	{
+		if(clients != null && clients.size() > 0)
+		{
 			clients.remove(client);
 		}
 	}
@@ -357,9 +372,12 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param msg The message to send
 	 */
-	protected void sendMessageToRegisteredClients(Message msg){
-		if(clients != null){
-			for(Messenger client : clients){
+	protected void sendMessageToRegisteredClients(Message msg)
+	{
+		if(clients != null)
+		{
+			for(Messenger client : clients)
+			{
 				sendMessageToClient(client, msg);
 			}
 		}
@@ -371,10 +389,13 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param client The client to reply to
 	 * @param msg The message to send
 	 */
-	protected void sendMessageToClient(Messenger client, Message msg){
-		try {
+	protected void sendMessageToClient(Messenger client, Message msg)
+	{
+		try 
+		{
 			client.send(msg);
-		} catch (RemoteException e) {
+		} catch (RemoteException e) 
+		{
 			// if we can't send to this client, let's remove it
 			unregisterClient(client);
 		}
@@ -385,7 +406,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param response The response to send
 	 */
-	protected void sendMessageResponse(RPCMessage response){
+	protected void sendMessageResponse(RPCMessage response)
+	{
 		Message msg = Message.obtain(null, ClientMessages.ON_MESSAGE_RESULT);
 		msg.obj = response;
 		sendMessageToRegisteredClients(msg);
@@ -397,7 +419,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param listener The client to reply to
 	 * @param reqCode The request code sent with the initial request
 	 */
-	protected void submenuListRequested(Messenger listener, int reqCode){
+	protected void submenuListRequested(Messenger listener, int reqCode)
+	{
 		Message msg = Message.obtain(null, ClientMessages.SUBMENU_LIST_RECEIVED);
 		msg.obj = getSubmenuList();
 		msg.arg1 = reqCode;
@@ -410,7 +433,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param listener The client to reply to
 	 * @param reqCode The request code sent with the initial request
 	 */
-	protected void commandListRequested(Messenger listener, int reqCode){
+	protected void commandListRequested(Messenger listener, int reqCode)
+	{
 		Message msg = Message.obtain(null, ClientMessages.COMMAND_LIST_RECEIVED);
 		msg.obj = getCommandList();
 		msg.arg1 = reqCode;
@@ -423,7 +447,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param listener The client to reply to
 	 * @param reqCode The request code sent with the initial request
 	 */
-	protected void buttonSubscriptionsRequested(Messenger listener, int reqCode){
+	protected void buttonSubscriptionsRequested(Messenger listener, int reqCode)
+	{
 		Message msg = Message.obtain(null, ClientMessages.BUTTON_SUBSCRIPTIONS_RECEIVED);
 		msg.obj = getButtonSubscriptions();
 		msg.arg1 = reqCode;
@@ -436,7 +461,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param listener The client to reply to
 	 * @param reqCode The request code sent with the initial request
 	 */
-	protected void interactionSetsRequested(Messenger listener, int reqCode){
+	protected void interactionSetsRequested(Messenger listener, int reqCode)
+	{
 		Message msg = Message.obtain(null, ClientMessages.INTERACTION_SETS_RECEIVED);
 		msg.obj = getInteractionSets();
 		msg.arg1 = reqCode;
@@ -449,7 +475,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param listener The client to reply to
 	 * @param reqCode The request code sent with the initial request
 	 */
-	protected void putFilesRequested(Messenger listener, int reqCode){
+	protected void putFilesRequested(Messenger listener, int reqCode)
+	{
 		Message msg = Message.obtain(null, ClientMessages.PUT_FILES_RECEIVED);
 		msg.obj = getPutFiles();
 		msg.arg1 = reqCode;
@@ -458,21 +485,27 @@ public  class SdlService extends Service implements IProxyListenerALM{
 
 	/* ********** Android service life cycle methods ********** */
 	@Override
-	public void onCreate() {
+	public void onCreate()
+	{
 		log("onCreate called");
 		initialize();
 		super.onCreate();
 	}
 	
-	private void initialize(){
+	private void initialize()
+	{
 		isConnected = false;
 		alreadyDisplayed = false;
 		
-		if(responseTracker == null){
-			responseTracker = new SdlResponseTracker(new SdlResponseTracker.Listener() {
+		if(responseTracker == null)
+		{
+			responseTracker = new SdlResponseTracker(new SdlResponseTracker.Listener() 
+			{
 				@Override
-				public void onRequestTimedOut() {
-					if(isConnected && !offlineMode){
+				public void onRequestTimedOut() 
+				{
+					if(isConnected && !offlineMode)
+					{
 						// if any sdl request times out, we will assume we disconnected.
 						showToast("A request timed out.  You may need to re-start SDL core.");
 						Message msg = Message.obtain(null, ClientMessages.SDL_DISCONNECTED);
@@ -481,7 +514,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 				}
 			});
 		}
-		else{
+		else
+		{
 			responseTracker.clear();
 		}
 		
@@ -496,7 +530,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	}
 
 	@Override
-	public IBinder onBind(Intent arg0) {
+	public IBinder onBind(Intent arg0) 
+	{
 		return messenger.getBinder();
 	}
 	
@@ -514,8 +549,10 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param inputIp The IP address to attempt a connection on
 	 */
-	protected void startSdlProxy(final IpAddress inputIp){
-		if(sdlProxy == null){
+	protected void startSdlProxy(final IpAddress inputIp)
+	{
+		if(sdlProxy == null)
+		{
 			sdlProxy = createSdlProxyObject(inputIp);
 		}
 	}
@@ -533,7 +570,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param inputIp The IP address to attempt a connection on
 	 * @return The created SmartDeviceLinkProxyALM object
 	 */
-	protected SdlProxyALM createSdlProxyObject(IpAddress inputIp){
+	protected SdlProxyALM createSdlProxyObject(IpAddress inputIp)
+	{
 		String appName = getResources().getString(R.string.app_name);
 		
 		SdlProxyALM result = null;
@@ -544,19 +582,22 @@ public  class SdlService extends Service implements IProxyListenerALM{
 			test.add(AppHMIType.INFORMATION);
 			test.add(AppHMIType.SYSTEM);
 			test.add(AppHMIType.TESTING);
-			
-			if(inputIp != null){
+			//Context mainactity = new USBAccessoryAttachmentActivity();
+			if(inputIp != null)
+			{
 				result = new SdlProxyALM((IProxyListenerALM)this, null, appName, null, null,
 						null, IS_MEDIA_APP, null, DEFAULT_LANGUAGE, DEFAULT_LANGUAGE,test, APP_ID,
 						null, false, false, new TCPTransportConfig(Integer.parseInt(inputIp.getTcpPort()), inputIp.getIpAddress(), WIFI_AUTO_RECONNECT));
 			}
-			else{
+			else
+			{
 				result = new SdlProxyALM((IProxyListenerALM)this, null, appName, null, null,
-						null, IS_MEDIA_APP, null, DEFAULT_LANGUAGE, DEFAULT_LANGUAGE, APP_ID,
-						null, false, false);
+						null, IS_MEDIA_APP, null, DEFAULT_LANGUAGE, DEFAULT_LANGUAGE,test, APP_ID,
+						null, false, false,new USBTransportConfig(getApplicationContext()));
 			}
 			currentIp = inputIp;
-		} catch (SdlException e) {
+		} catch (SdlException e) 
+		{
 			e.printStackTrace();
 		}
 		
@@ -567,7 +608,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * Disposes of any current proxy object if it exists and automatically creates a new
 	 * proxy connection to the previously connected IP address.
 	 */
-	protected void resetProxy(){
+	protected void resetProxy()
+	{
 		stopSdlProxy();
 		startSdlProxy(currentIp);
 	}
@@ -576,12 +618,15 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * Disposes of any current proxy object and sets the object to null so it cannot be
 	 * used again.
 	 */
-	protected void stopSdlProxy(){
+	protected void stopSdlProxy()
+	{
 		if(sdlProxy != null && sdlProxy.getIsConnected() && sdlProxy.getAppInterfaceRegistered()){
-			try {
+			try 
+			{
 				sdlProxy.dispose();
 				sdlProxy = null;
-			} catch (SdlException e) {
+			} catch (SdlException e) 
+			{
 				e.printStackTrace();
 			}
 		}
@@ -594,12 +639,15 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param command The request to send
 	 */
-	protected void onSendMessageReceived(RPCRequest command){
-		if(command == null){
+	protected void onSendMessageReceived(RPCRequest command)
+	{
+		if(command == null)
+		{
 			throw new NullPointerException("Cannot send a null command.");
 		}
 		
-		if(!offlineMode && sdlProxy == null){
+		if(!offlineMode && sdlProxy == null)
+		{
 			throw new IllegalStateException("Proxy object is null, so no commands can be sent.");
 		}
 		
@@ -609,11 +657,13 @@ public  class SdlService extends Service implements IProxyListenerALM{
 		// after setting appropriate parameters, send the full, completed response back to the clients
 		sendMessageResponse(command);
 		
-		if(!offlineMode){
+		if(!offlineMode)
+		{
 			// send the request through SmartDeviceLink
 			sendRpcRequest(command);
 		}
-		else{
+		else
+		{
 			// in offline mode, we'll just send a "fake" success response.
 			SdlResponseFactory.sendGenericResponseForRequest(command, this);
 		}
@@ -624,10 +674,13 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param request
 	 */
-	protected void sendRpcRequest(RPCRequest request){
-		try {
+	protected void sendRpcRequest(RPCRequest request)
+	{
+		try 
+		{
 			sdlProxy.sendRPCRequest(request);
-		} catch (SdlException e) {
+		} catch (SdlException e) 
+		{
 			e.printStackTrace();
 		}
 	}
@@ -638,32 +691,39 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param command The RPC command to edit
 	 */
-	protected void setRequestSpecificParameters(RPCRequest command){
+	protected void setRequestSpecificParameters(RPCRequest command)
+	{
 		String name = command.getFunctionName();
 
 		// give the command a correlation id
 		command.setCorrelationID(correlationIdGenerator.next());
 		
-		if(name.equals(FunctionID.ADD_COMMAND)){
+		if(name.equals(FunctionID.ADD_COMMAND))
+		{
 			((AddCommand) command).setCmdID(IdGenerator.next());
 			addToRequestQueue(command);
 		}
-		else if(name.equals(FunctionID.ADD_SUB_MENU)){
+		else if(name.equals(FunctionID.ADD_SUB_MENU))
+		{
 			((AddSubMenu) command).setMenuID(IdGenerator.next());
 			addToRequestQueue(command);
 		}
-		else if(name.equals(FunctionID.CREATE_INTERACTION_CHOICE_SET)){
+		else if(name.equals(FunctionID.CREATE_INTERACTION_CHOICE_SET))
+		{
 			CreateInteractionChoiceSet choiceSet = (CreateInteractionChoiceSet) command;
 			choiceSet.setInteractionChoiceSetID(IdGenerator.next());
 
 			addToRequestQueue(command);
 		}
-		else if(name.equals(FunctionID.ALERT)){
+		else if(name.equals(FunctionID.ALERT))
+		{
 		    Alert msg = (Alert) command;
 		    
 		    List<SoftButton> softButtons = msg.getSoftButtons();
-		    if(softButtons != null){
-		        for(SoftButton button : softButtons){
+		    if(softButtons != null)
+		    {
+		        for(SoftButton button : softButtons)
+		        {
                     customButtonsManager.addItem(createMenuItem(button));
                 }
 		    }
@@ -671,16 +731,20 @@ public  class SdlService extends Service implements IProxyListenerALM{
 			int timeout = ((Alert) command).getDuration();
 			addToRequestQueue(command, (timeout + SdlConstants.AlertConstants.EXPECTED_REPSONSE_TIME_OFFSET));
 		}
-		else if(name.equals(FunctionID.PERFORM_INTERACTION)){
+		else if(name.equals(FunctionID.PERFORM_INTERACTION))
+		{
 			int timeout = ((PerformInteraction) command).getTimeout();
 			addToRequestQueue(command, (timeout + SdlConstants.PerformInteractionConstants.EXPECTED_REPSONSE_TIME_OFFSET));
 		}
-		else if(name.equals(FunctionID.SCROLLABLE_MESSAGE)){
+		else if(name.equals(FunctionID.SCROLLABLE_MESSAGE))
+		{
 		    ScrollableMessage msg = (ScrollableMessage) command;
 		    
 		    List<SoftButton> softButtons = msg.getSoftButtons();
-		    if(softButtons != null){
-		        for(SoftButton button : softButtons){
+		    if(softButtons != null)
+		    {
+		        for(SoftButton button : softButtons)
+		        {
 		            customButtonsManager.addItem(createMenuItem(button));
 		        }
 		    }
@@ -688,12 +752,15 @@ public  class SdlService extends Service implements IProxyListenerALM{
 			int timeout = ((ScrollableMessage) command).getTimeout();
 			addToRequestQueue(command, (timeout + SdlConstants.ScrollableMessageConstants.EXPECTED_REPSONSE_TIME_OFFSET));
 		}
-		else if(name.equals(FunctionID.SHOW)){
+		else if(name.equals(FunctionID.SHOW))
+		{
             Show msg = (Show) command;
             
             List<SoftButton> softButtons = msg.getSoftButtons();
-            if(softButtons != null){
-                for(SoftButton button : softButtons){
+            if(softButtons != null)
+            {
+                for(SoftButton button : softButtons)
+                {
                     customButtonsManager.addItem(createMenuItem(button));
                 }
             }
@@ -701,7 +768,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 		else if( name.equals(FunctionID.PUT_FILE) || name.equals(FunctionID.SUBSCRIBE_BUTTON) || name.equals(FunctionID.SUBSCRIBE_VEHICLE_DATA) ||
 				name.equals(FunctionID.UNSUBSCRIBE_VEHICLE_DATA) || name.equals(FunctionID.DELETE_COMMAND) || 
 				name.equals(FunctionID.UNSUBSCRIBE_BUTTON) || name.equals(FunctionID.DELETE_INTERACTION_CHOICE_SET) || name.equals(FunctionID.DELETE_SUB_MENU) ||
-				name.equals(FunctionID.DELETE_FILE)){
+				name.equals(FunctionID.DELETE_FILE))
+		{
 			addToRequestQueue(command);
 		}
 		
@@ -712,7 +780,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param request The request to add
 	 */
-	protected void addToRequestQueue(RPCRequest request){
+	protected void addToRequestQueue(RPCRequest request)
+	{
 		responseTracker.add(request);
 	}
 	
@@ -722,7 +791,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param request The request to add
 	 * @param timeout A timeout that exceeds the expected timeout of the request
 	 */
-	protected void addToRequestQueue(RPCRequest request, int timeout){
+	protected void addToRequestQueue(RPCRequest request, int timeout)
+	{
 		responseTracker.add(request, timeout);
 	}
 	
@@ -731,7 +801,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * 
 	 * @param request The request to remove
 	 */
-	protected RPCRequest removeFromRequestQueue(int key){
+	protected RPCRequest removeFromRequestQueue(int key)
+	{
 		return responseTracker.remove(key);
 	}
 	
@@ -741,21 +812,26 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param command The command to translate
 	 * @return The translated MenuItem object
 	 */
-	protected MenuItem createMenuItem(AddCommand command){
+	protected MenuItem createMenuItem(AddCommand command)
+	{
 		final String name = command.getMenuParams().getMenuName();
 		final int id = command.getCmdID();
 		int parentId;
 		final Integer parentInteger = command.getMenuParams().getParentID();
-		if(parentInteger == null){
+		if(parentInteger == null)
+		{
 			parentId = -1;
 		}
-		else{
+		else
+		{
 			parentId = parentInteger;
 		}
 		
-		final MenuItem result = new CommandButton(name, id, parentId, new OnClickListener(){
+		final MenuItem result = new CommandButton(name, id, parentId, new OnClickListener()
+		{
 			@Override
-			public void onClick(CommandButton button) {
+			public void onClick(CommandButton button) 
+			{
 				showToast(new StringBuilder().append(name).append(" clicked!").toString());
 			}
 		});
@@ -769,7 +845,8 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	 * @param command The command to translate
 	 * @return The translated MenuItem object
 	 */
-	protected MenuItem createMenuItem(AddSubMenu command){
+	protected MenuItem createMenuItem(AddSubMenu command)
+	{
 		final String name = command.getMenuName();
 		final MenuItem result = new SubmenuButton(name, command.getMenuID());
 		return result;
@@ -1167,6 +1244,9 @@ public  class SdlService extends Service implements IProxyListenerALM{
 	@Override public void onChangeRegistrationResponse(ChangeRegistrationResponse response) {sendMessageResponse(response);}
 	@Override public void onSetDisplayLayoutResponse(SetDisplayLayoutResponse response) {sendMessageResponse(response);}
 	
+	//huaguoping-add-20150908-start
+	@Override public void onDisplayTextResponse(DisplayTextResponse response) {sendMessageResponse(response);}
+	//huaguoping-add-20150908-end
 	
 	private void showToast(String msg){
 		if(toast == null){

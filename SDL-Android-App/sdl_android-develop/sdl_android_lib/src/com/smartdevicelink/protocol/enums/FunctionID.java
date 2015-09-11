@@ -53,7 +53,11 @@ public enum FunctionID{
     SYSTEM_REQUEST(38, "SystemRequest"),
     SEND_LOCATION(39, "SendLocation"),
     DIAL_NUMBER(40, "DialNumber"),
-
+    
+    //Huaguoping-Add-20150831-Start
+    DISPLAYTEXT(41, "DisplayText"),
+    //Huaguoping-Add-20150831-Start
+   
     // NOTIFICATIONS
     ON_HMI_STATUS(32768, "OnHMIStatus"),
     ON_APP_INTERFACE_UNREGISTERED(32769, "OnAppInterfaceUnregistered"),

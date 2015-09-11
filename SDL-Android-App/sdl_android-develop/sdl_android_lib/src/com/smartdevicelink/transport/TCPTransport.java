@@ -121,6 +121,9 @@ public class TCPTransport extends SdlTransport {
                     try {
                         mOutputStream.write(msgBytes, offset, length);
                         bResult = true;
+                        
+                        Log.e("TCP",msgBytes.toString());
+                        
                         logInfo("TCPTransport.sendBytesOverTransport: successfully send data");
                     } catch (IOException e) {
                         logError("TCPTransport.sendBytesOverTransport: error during sending data: " + e.getMessage());

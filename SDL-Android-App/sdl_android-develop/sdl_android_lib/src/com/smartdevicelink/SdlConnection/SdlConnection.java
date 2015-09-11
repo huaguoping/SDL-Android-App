@@ -147,22 +147,28 @@ public class SdlConnection implements IProtocolListener, ITransportListener, ISt
 	}	
 	
 	@Override
-	public void onTransportBytesReceived(byte[] receivedBytes,
-			int receivedBytesLength) {
+	public void onTransportBytesReceived(byte[] receivedBytes,int receivedBytesLength) 
+	{
 		// Send bytes to protocol to be interpreted 
-		synchronized(PROTOCOL_REFERENCE_LOCK) {
-			if (_protocol != null) {
+		synchronized(PROTOCOL_REFERENCE_LOCK) 
+		{
+			if (_protocol != null)
+			{
 				_protocol.HandleReceivedBytes(receivedBytes, receivedBytesLength);
 			}
 		}
 	}
 
 	@Override
-	public void onTransportConnected() {
-		synchronized(PROTOCOL_REFERENCE_LOCK){
+	public void onTransportConnected() 
+	{
+		synchronized(PROTOCOL_REFERENCE_LOCK)
+		{
 			if(_protocol != null){
-					for (SdlSession s : listenerList) {
-						if (s.getSessionId() == 0) {
+					for (SdlSession s : listenerList) 
+					{
+						if (s.getSessionId() == 0) 
+						{
 							startHandShake();
 						}
 					}

@@ -42,7 +42,8 @@ public class SdlLogMessage {
 	}
 	
 	// read information from the input RPC Message and fills in the appropriate fields for this class.
-	private void setFields(RPCMessage rpcm){
+	private void setFields(RPCMessage rpcm)
+	{
 		// get what type of message this is - request, response or notification
 		messageType = rpcm.getMessageType();
 		
@@ -52,16 +53,19 @@ public class SdlLogMessage {
 		
 		details = "";
 		
-		if(messageType.equals(RPCMessage.KEY_RESPONSE)){
+		if(messageType.equals(RPCMessage.KEY_RESPONSE))
+		{
 			// input message was a response, which is slightly more detailed than requests or notifications, so we'll have a separate method for responses.
 			setResponseFields((RPCResponse) rpcm);
 		}
-		else if(messageType.equals(RPCMessage.KEY_REQUEST)){
+		else if(messageType.equals(RPCMessage.KEY_REQUEST))
+		{
 			// requests need to append "(request)" to the input function name.
 			functionName = new StringBuilder().append(rpcm.getFunctionName()).append(" ").append(POSITIVE_REQUEST).toString();
 			correlationId = ((RPCRequest) rpcm).getCorrelationID();
 		}
-		else if(messageType.equals(RPCMessage.KEY_NOTIFICATION)){
+		else if(messageType.equals(RPCMessage.KEY_NOTIFICATION))
+		{
 			// notifications need to append "(notification)" to the input function name.
 			functionName = new StringBuilder().append(rpcm.getFunctionName()).append(" ").append(POSITIVE_NOTIFICATION).toString();
 		}
@@ -71,54 +75,65 @@ public class SdlLogMessage {
 	}
 	
 	// set data for a response type message
-	private void setResponseFields(RPCResponse response){
+	private void setResponseFields(RPCResponse response)
+	{
 		success = response.getSuccess();
 		correlationId = response.getCorrelationID();
 		
-		if(success){
+		if(success)
+		{
 			// if the response was successful, set the details to success and show the function name as a positive response
 			details = response.getResultCode().name();
 			functionName = new StringBuilder().append(response.getFunctionName()).append(" ").append(POSITIVE_RESPONSE).toString();
 		}
-		else{
+		else
+		{
 			// if the response was unsuccessful, show a detailed explanation in details and set function name as a negative response
 			functionName = new StringBuilder().append(response.getFunctionName()).append(" ").append(NEGATIVE_RESPONSE).toString();
 			
 			// if the response has extra info, we'll append it after the negative response.
 			String info = response.getInfo();
 			StringBuilder builder = new StringBuilder().append(response.getResultCode().name());
-			if(info != null){
+			if(info != null)
+			{
 				builder.append(": ").append(info);
 			}
 			details = builder.toString();
 		}
 	}
 
-	public String getTimeStamp() {
+	public String getTimeStamp()
+	{
 		return timeStamp;
 	}
 
-	public String getDetails() {
+	public String getDetails()
+	{
 		return details;
 	}
 
-	public String getFunctionName() {
+	public String getFunctionName()
+	{
 		return functionName;
 	}
 	
-	public boolean getSuccess(){
+	public boolean getSuccess()
+	{
 		return success;
 	}
 	
-	public String getMessageType(){
+	public String getMessageType()
+	{
 		return messageType;
 	}
 	
-	public String getJsonData(){
+	public String getJsonData()
+	{
 		return jsonData;
 	}
 	
-	public int getCorrelationId(){
+	public int getCorrelationId()
+	{
 		return correlationId;
 	}
 }

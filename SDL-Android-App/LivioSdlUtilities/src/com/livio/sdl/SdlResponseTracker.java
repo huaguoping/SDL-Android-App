@@ -13,7 +13,8 @@ import com.smartdevicelink.proxy.RPCRequest;
  * @author Mike Burke
  *
  */
-public class SdlResponseTracker {
+public class SdlResponseTracker
+{
 
 	/**
 	 * Listener interface for SdlResponseTracker.  Contains callback method
@@ -22,7 +23,8 @@ public class SdlResponseTracker {
 	 * @author Mike Burke
 	 *
 	 */
-	public interface Listener{
+	public interface Listener
+	{
 		public void onRequestTimedOut();
 	}
 	
@@ -36,7 +38,8 @@ public class SdlResponseTracker {
 	
 	private Listener listener;
 	
-	public SdlResponseTracker(Listener l) {
+	public SdlResponseTracker(Listener l) 
+	{
 		this.listener = l;
 	}
 	
@@ -45,7 +48,8 @@ public class SdlResponseTracker {
 	 * 
 	 * @param request The request to track
 	 */
-	public void add(RPCRequest request){
+	public void add(RPCRequest request)
+	{
 		add(request, DEFAULT_TIMEOUT);
 	}
 	
@@ -55,15 +59,18 @@ public class SdlResponseTracker {
 	 * @param request The request to track
 	 * @param duration The timeout duration (in ms)
 	 */
-	public void add(RPCRequest request, int duration){
+	public void add(RPCRequest request, int duration)
+	{
 		int corrId = request.getCorrelationID();
 		requests.put(corrId, request);
 		
-		Timeout timeout = new Timeout(duration, new Timeout.Listener() {
+		Timeout timeout = new Timeout(duration, new Timeout.Listener() 
+		{
 			@Override public void onTimeoutCancelled() {}
 			
 			@Override
-			public void onTimeoutCompleted() {
+			public void onTimeoutCompleted() 
+			{
 				notifyRequestTimedOut();
 			}
 		});
@@ -78,7 +85,8 @@ public class SdlResponseTracker {
 	 * @param corrId The correlation id to stop tracking
 	 * @return The request that was removed
 	 */
-	public RPCRequest remove(int corrId){
+	public RPCRequest remove(int corrId)
+	{
 		timeouts.get(corrId).cancel();
 		timeouts.remove(corrId);
 		
@@ -90,18 +98,23 @@ public class SdlResponseTracker {
 	/**
 	 * Clears all requests being tracked and cancels their associated timeouts.
 	 */
-	public void clear(){
-		if(requests != null){
+	public void clear()
+	{
+		if(requests != null)
+		{
 			// loop through requests and remove each one
-			for(int numItems = requests.size()-1; numItems >= 0; numItems--){
+			for(int numItems = requests.size()-1; numItems >= 0; numItems--)
+			{
 				RPCRequest request = requests.valueAt(numItems);
 				remove(request.getCorrelationID());
 			}
 		}
 	}
 	
-	private void notifyRequestTimedOut(){
-		if(listener != null){
+	private void notifyRequestTimedOut()
+	{
+		if(listener != null)
+		{
 			listener.onRequestTimedOut();
 		}
 	}

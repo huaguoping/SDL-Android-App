@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -132,6 +133,11 @@ public class ScrollableMessageDialog extends BaseOkCancelDialog {
 			}
 			
 			RPCRequest result = SdlRequestFactory.scrollableMessage(message, timeout, softButtons);
+			Log.d("SDL",result.toString());
+			Log.e("SDL",result.toString());
+			Log.v("SDL",result.toString());
+			Log.i("SDL",result.toString());
+			Log.w("SDL",result.toString());
 			notifyListener(result);
 		}
 	};

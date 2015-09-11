@@ -23,6 +23,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -75,6 +76,7 @@ import com.livio.sdltester.dialogs.SpeakDialog;
 import com.smartdevicelink.protocol.enums.FunctionID;
 import com.smartdevicelink.proxy.RPCMessage;
 import com.smartdevicelink.proxy.RPCRequest;
+import com.smartdevicelink.proxy.rpc.DisplayText;
 import com.smartdevicelink.proxy.rpc.ListFiles;
 import com.smartdevicelink.proxy.rpc.enums.FileType;
 import com.smartdevicelink.proxy.rpc.enums.TextAlignment;
@@ -242,6 +244,9 @@ public class MainActivity extends Activity{
 	private void sendSdlMessageToService(RPCRequest request){
 		Message msg = Message.obtain(null, SdlService.ServiceMessages.SEND_MESSAGE);
 		msg.obj = request;
+		
+		Log.e("Main",request.toString());
+		
 		sendMessageToService(msg);
 	}
 	
@@ -309,6 +314,7 @@ public class MainActivity extends Activity{
 		msg.arg1 = reqCode;
 		sendMessageToService(msg);
 	}
+	
 	
 	/**
 	 * Resets the SDL service.
@@ -864,7 +870,7 @@ public class MainActivity extends Activity{
 					}
 					
 					LivioSdlTesterPreferences.saveTransportChoice(MainActivity.this, 
-							(result == null) ? LivioSdlTesterPreferences.PREF_TRANSPORT_BLUETOOTH : LivioSdlTesterPreferences.PREF_TRANSPORT_WIFI);
+							(result == null) ? LivioSdlTesterPreferences.PREF_TRANSPORT_USB : LivioSdlTesterPreferences.PREF_TRANSPORT_WIFI);
 					
 					// show an indeterminate connecting dialog
 					connectingDialog = new IndeterminateProgressDialog(MainActivity.this, "Connecting");
@@ -918,6 +924,15 @@ public class MainActivity extends Activity{
 		}
 		
 		switch(command){
+		
+		//Huaguoping-Add-20150831-Start
+		case DISPLAYTEXT:
+			// the put file dialog needs a list of images that have been added so far, so let's request
+			// that list here and we'll actually show the dialog when it gets returned by the service.  See onPutFileListReceived().
+			sendSdlMessageToService(new DisplayText());
+			break;
+		//Huaguoping-Add-20150831-End
+		
 		case PUT_FILE:
 			// the put file dialog needs a list of images that have been added so far, so let's request
 			// that list here and we'll actually show the dialog when it gets returned by the service.  See onPutFileListReceived().
